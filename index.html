@@ -125,9 +125,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYueHpCn6BVIB8I4Hmv
 // =====================================================================
 
 const $ = id => document.getElementById(id);
-// Accuracy rules (metres): save is allowed at <= TARGET_ACC.
-// If GPS cannot reach that (e.g. dense buildings), <= FALLBACK_ACC is accepted after FALLBACK_AFTER ms.
-const TARGET_ACC = 20, FALLBACK_ACC = 50, FALLBACK_AFTER = 40000, BEST_KEEP_MS = 60000;
+// Accuracy rules (metres): saving is allowed at once when accuracy <= TARGET_ACC.
+// Otherwise the form keeps improving the fix for WAIT_MS, then lets you save with the best reading
+// it got, whatever the accuracy (the accuracy is stored with the entry so poor ones can be reviewed).
+const TARGET_ACC = 20, WAIT_MS = 15000, BEST_KEEP_MS = 120000;
 let loc = null;          // best recent position
 let watchStart = 0;
 let photoData = null;    // base64 jpeg (no prefix)
@@ -153,19 +154,21 @@ function unlockForm(){
 function accOK(){
   if(!loc) return false;
   const waited = Date.now() - watchStart;
-  return loc.acc <= TARGET_ACC || (waited >= FALLBACK_AFTER && loc.acc <= FALLBACK_ACC);
+  return loc.acc <= TARGET_ACC || waited >= WAIT_MS;
 }
 function refreshGpsUI(){
   if(!loc) return;
   const btn = $("submit"), good = accOK();
   btn.disabled = !good || busy;
   if(good){
-    setGps("ok","Location locked (±"+loc.acc+" m)", loc.lat.toFixed(5)+", "+loc.lng.toFixed(5));
+    const weak = loc.acc > TARGET_ACC;
+    setGps(weak ? "" : "ok",
+      weak ? "Location captured, low accuracy (±"+loc.acc+" m)" : "Location locked (±"+loc.acc+" m)",
+      loc.lat.toFixed(5)+", "+loc.lng.toFixed(5)+(weak ? ". Still improving; you can save now or wait for a better fix." : ""));
   }else{
-    const left = Math.max(0, Math.ceil((FALLBACK_AFTER-(Date.now()-watchStart))/1000));
+    const left = Math.max(0, Math.ceil((WAIT_MS-(Date.now()-watchStart))/1000));
     setGps("","Improving accuracy… now ±"+loc.acc+" m",
-      "Need ±"+TARGET_ACC+" m or better. Stay outdoors or near the door, away from walls."+
-      (left>0 ? " Relaxed limit (±"+FALLBACK_ACC+" m) applies in "+left+"s." : ""));
+      "Saving unlocks in "+left+"s, or sooner if accuracy reaches ±"+TARGET_ACC+" m.");
   }
 }
 function onPos(p){
@@ -178,6 +181,7 @@ function onPos(p){
 let busy = false;
 setInterval(refreshGpsUI, 1000);
 function onErr(e){
+  if(e.code===3 && loc) return;   // slow update while we already have a fix: keep going
   const m = e.code===1 ? "Location permission was denied."
           : e.code===2 ? "Your device could not get a location. Make sure GPS is on."
           : "Getting your location timed out. Make sure GPS is on.";
@@ -189,7 +193,7 @@ function startLocation(){
   setGps("", "Checking location…", "Allow location access when your browser asks.");
   loc = null; watchStart = Date.now();
   watchId = navigator.geolocation.watchPosition(onPos, onErr,
-    {enableHighAccuracy:true, timeout:20000, maximumAge:0});
+    {enableHighAccuracy:true, timeout:30000, maximumAge:0});
 }
 $("retry").addEventListener("click", startLocation);
 if(navigator.permissions && navigator.permissions.query){
@@ -244,8 +248,7 @@ $("f").addEventListener("submit", async e=>{
 
   const btn = $("submit");
   if(!loc){ lockForm("Location is needed to save the entry."); return; }
-  if(!accOK()){ st.className="bad"; st.textContent="Location accuracy is ±"+loc.acc+" m. Wait for ±"+TARGET_ACC+" m or better."; return; }
-  if(Date.now()-loc.ts > BEST_KEEP_MS){ st.className="bad"; st.textContent="Location is out of date. Wait a few seconds for a fresh fix."; return; }
+  if(!accOK()){ st.className="bad"; st.textContent="Still getting your location. Try again in a few seconds."; return; }
 
   busy = true; btn.disabled = true;
   const sent = loc;   // reading used for this entry
@@ -264,6 +267,7 @@ $("f").addEventListener("submit", async e=>{
     const j = await r.json();
     if(!j.ok) throw new Error(j.error||"Server error");
     st.className="ok"; st.textContent="Saved. Ready for the next house.";
+    startLocation();   // next house needs its own fresh fix
     $("f").reset(); photoData=null; $("preview").style.display="none";
     $("photoBtn").textContent="Take or choose photo"; $("photoHint").textContent="One clear photo of the house front.";
   }catch(err){
