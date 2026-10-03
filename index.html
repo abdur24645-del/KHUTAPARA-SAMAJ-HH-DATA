@@ -9,98 +9,150 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#eef1ec; --card:#fff; --ink:#1d2b3a; --muted:#5d6b78; --line:#cfd8d2;
-  --accent:#e08a00; --accent-ink:#1d2b3a; --ok:#1f7a4d; --bad:#b3261e;
+  --bg:#f3efe6; --card:#fffdf8; --ink:#14313b; --muted:#5f747b; --line:#d9d2c2;
+  --teal:#0f4c5c; --teal2:#17707f; --accent:#f2a516; --accent-ink:#14313b;
+  --ok:#1f7a4d; --bad:#b3261e; --male:#e3f0f6; --female:#fbe6e2;
+  --hero-a:#0f4c5c; --hero-b:#17707f; --roof:#f2a516; --wall:#fffdf8; --wall2:#e7dfcd; --win:#17707f;
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#12181f;--card:#1b242d;--ink:#e8edf1;--muted:#98a6b2;--line:#33414d;--ok:#4cc38a;--bad:#ff8a80}
+  :root:not([data-theme="light"]){--bg:#0e1a1f;--card:#16262d;--ink:#e9f0f2;--muted:#9bb1b8;--line:#2d434c;
+    --ok:#4cc38a;--bad:#ff8a80;--male:#1b3a47;--female:#40262a;--hero-a:#0a3440;--hero-b:#0f5563;--wall:#e9dfc8;--wall2:#c9bd9f}
 }
 *{box-sizing:border-box}
 html{height:100%}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
-main{max-width:560px;margin:0 auto;padding:20px 16px 48px}
-h1{font-size:1.7rem;line-height:1.15;margin:8px 0 4px;font-weight:800;letter-spacing:-.01em}
-.sub{color:var(--muted);margin:0 0 18px}
-.gps{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);margin-bottom:18px}
-.gps .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none}
-.gps.ok{border-color:var(--ok)} .gps.ok .dot{background:var(--ok)}
-.gps.bad{border-color:var(--bad)} .gps.bad .dot{background:var(--bad)}
-.gps b{display:block}
-.gps small{color:var(--muted)}
-form{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:16px}
-fieldset{border:0;padding:0;margin:0;display:grid;gap:16px;min-width:0}
+  padding-bottom:env(safe-area-inset-bottom,0)}
+.hero{background:linear-gradient(160deg,var(--hero-a),var(--hero-b));color:#fff;padding:calc(env(safe-area-inset-top,0px) + 22px) 20px 0;border-radius:0 0 28px 28px;overflow:hidden}
+.hero-in{max-width:560px;margin:0 auto}
+.hero h1{font-size:1.75rem;line-height:1.1;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+.hero p{margin:0;color:#cfe6ea;max-width:30ch}
+.hero svg{display:block;width:100%;height:auto;margin-top:6px}
+main{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+.gps{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);margin:-6px 0 16px;box-shadow:0 6px 18px rgba(15,76,92,.12)}
+.gps .pin{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fdecc4;color:#a86d00}
+.gps .pin svg{width:20px;height:20px}
+.gps.ok{border-color:var(--ok)} .gps.ok .pin{background:#d3f0e0;color:var(--ok)}
+.gps.bad{border-color:var(--bad)} .gps.bad .pin{background:#fadbd8;color:var(--bad)}
+.gps:not(.ok):not(.bad) .pin{animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,165,22,.5)}100%{box-shadow:0 0 0 12px rgba(242,165,22,0)}}
+@media (prefers-reduced-motion:reduce){.gps .pin{animation:none!important}}
+.gps b{display:block;line-height:1.25}
+.gps small{color:var(--muted);display:block;line-height:1.3;margin-top:2px}
+form{display:block}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:14px;min-width:0}
 fieldset:disabled{opacity:.45}
-label{display:block;font-weight:700;font-size:.95rem;margin-bottom:5px}
-input,textarea{width:100%;font:inherit;color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:8px;padding:11px 12px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:14px}
+.card h2{margin:0;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.card h2 svg{width:22px;height:22px;color:var(--teal2);flex:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card h2 svg{color:var(--accent)}}
+label{display:block;font-weight:700;font-size:.92rem;margin-bottom:5px}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px}
 textarea{min-height:92px;resize:vertical}
-input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+input:focus,textarea:focus,button:focus-visible,.btn:focus-within{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cnt{border-radius:14px;padding:10px;text-align:center}
+.cnt label{margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:5px}
+.cnt label svg{width:18px;height:18px}
+.cnt input{text-align:center;font-size:1.3rem;font-weight:800;padding:8px;background:var(--card)}
+.cnt.t{background:#fdecc4;color:#14313b}.cnt.m{background:var(--male)}.cnt.f{background:var(--female)}
 .hint{font-size:.85rem;color:var(--muted);margin-top:4px}
-.err{font-size:.85rem;color:var(--bad);margin-top:4px;min-height:0}
-.photo{border:1.5px dashed var(--line);border-radius:10px;padding:14px;text-align:center}
-.photo img{display:none;max-width:100%;max-height:260px;border-radius:8px;margin:0 auto 10px}
+.err{font-size:.85rem;color:var(--bad);font-weight:600}
+.err:empty{display:none}
+.photo{border:2px dashed var(--line);border-radius:16px;padding:16px;text-align:center;background:repeating-linear-gradient(45deg,transparent 0 10px,rgba(15,76,92,.03) 10px 20px)}
+.photo .ph{width:64px;height:64px;margin:0 auto 6px;color:var(--teal2)}
+.photo.has .ph{display:none}
+.photo img{display:none;max-width:100%;max-height:260px;border-radius:12px;margin:0 auto 10px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .photo input{display:none}
-.btn{display:inline-block;cursor:pointer;font:inherit;font-weight:700;border-radius:8px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:10px 16px}
-button.primary{width:100%;background:var(--accent);color:var(--accent-ink);border-color:var(--accent);padding:14px;font-size:1.05rem;font-weight:800;border-radius:10px;cursor:pointer}
-button.primary:disabled{opacity:.6;cursor:not-allowed}
+.btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font:inherit;font-weight:700;border-radius:999px;border:1.5px solid var(--teal);background:var(--teal);color:#fff;padding:10px 18px}
+.btn svg{width:18px;height:18px}
+button.primary{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;padding:16px;font:inherit;font-size:1.08rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 6px 0 #c4820a}
+button.primary:active:not(:disabled){transform:translateY(3px);box-shadow:0 3px 0 #c4820a}
+button.primary svg{width:22px;height:22px}
+button.primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:0 6px 0 #c4820a55}
 #status{text-align:center;font-weight:700;min-height:1.4em}
 #status.ok{color:var(--ok)} #status.bad{color:var(--bad)}
-.lock{position:fixed;inset:0;z-index:10;background:rgba(10,16,22,.88);display:none;align-items:center;justify-content:center;padding:24px}
+.lock{position:fixed;inset:0;z-index:10;background:rgba(8,26,32,.9);display:none;align-items:center;justify-content:center;padding:24px}
 .lock.show{display:flex}
-.lock div{background:var(--card);border-radius:14px;padding:22px;max-width:380px}
+.lock div{background:var(--card);border-radius:20px;padding:22px;max-width:380px;text-align:center}
+.lock .big{width:72px;height:72px;margin:0 auto 6px;color:var(--bad)}
 .lock h2{margin:0 0 8px}
-.lock ol{padding-left:20px;margin:8px 0 16px}
+.lock ol{padding-left:20px;margin:8px 0 16px;text-align:left}
 </style>
 </head>
 <body>
-<main>
+<header class="hero"><div class="hero-in">
   <h1>House survey entry</h1>
-  <p class="sub">Fill this in at the house. Location and one house photo are required.</p>
-
+  <p>Fill this in at the house. Location and one house photo are required.</p>
+  <svg viewBox="0 0 400 130" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+    <circle cx="332" cy="34" r="20" fill="#f2a516" opacity=".95"/>
+    <path d="M0 96c60-18 120-18 200-4s140 6 200-8v46H0z" fill="#0b3b48" opacity=".55"/>
+    <g>
+      <rect x="22" y="70" width="70" height="46" rx="3" fill="var(--wall)"/><path d="M14 72l43-34 43 34z" fill="var(--roof)"/>
+      <rect x="34" y="84" width="14" height="14" rx="2" fill="var(--win)"/><rect x="62" y="90" width="16" height="26" rx="2" fill="var(--wall2)"/>
+    </g>
+    <g>
+      <rect x="118" y="52" width="64" height="64" rx="3" fill="var(--wall)"/><rect x="110" y="46" width="80" height="10" rx="3" fill="var(--roof)"/>
+      <rect x="130" y="66" width="14" height="14" rx="2" fill="var(--win)"/><rect x="156" y="66" width="14" height="14" rx="2" fill="var(--win)"/>
+      <rect x="143" y="92" width="16" height="24" rx="2" fill="var(--wall2)"/>
+    </g>
+    <g>
+      <rect x="212" y="76" width="64" height="40" rx="3" fill="var(--wall)"/><path d="M204 78l40-30 40 30z" fill="var(--roof)"/>
+      <rect x="222" y="88" width="12" height="12" rx="2" fill="var(--win)"/><rect x="250" y="94" width="14" height="22" rx="2" fill="var(--wall2)"/>
+    </g>
+    <g>
+      <rect x="304" y="60" width="72" height="56" rx="3" fill="var(--wall)"/><rect x="296" y="54" width="88" height="10" rx="3" fill="var(--roof)"/>
+      <rect x="316" y="74" width="12" height="12" rx="2" fill="var(--win)"/><rect x="342" y="74" width="12" height="12" rx="2" fill="var(--win)"/><rect x="332" y="96" width="14" height="20" rx="2" fill="var(--wall2)"/>
+    </g>
+    <path d="M150 20c-7 0-12 5-12 11 0 8 12 19 12 19s12-11 12-19c0-6-5-11-12-11z" fill="#fff"/><circle cx="150" cy="31" r="4.5" fill="#0f4c5c"/>
+    <rect x="0" y="116" width="400" height="14" fill="#0b3b48" opacity=".6"/>
+  </svg>
+</div></header>
+<main>
   <div class="gps" id="gps" role="status">
-    <span class="dot"></span>
+    <span class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg></span>
     <div><b id="gpsTitle">Checking location…</b><small id="gpsDetail">Allow location access when your browser asks.</small></div>
   </div>
 
   <form id="f" novalidate>
     <fieldset id="fs" disabled>
-      <div>
-        <label for="house">House no.</label>
-        <input id="house" required autocomplete="off" maxlength="40">
-      </div>
-      <div>
-        <label for="guardian">Guardian name</label>
-        <input id="guardian" required autocomplete="name" maxlength="80">
-      </div>
-      <div>
-        <label for="phone">Phone no.</label>
-        <input id="phone" type="tel" inputmode="numeric" required autocomplete="tel" maxlength="14" placeholder="10-digit mobile number">
-        <div class="err" id="phoneErr"></div>
-      </div>
-      <div class="row">
-        <div><label for="total">Total persons</label><input id="total" type="number" min="1" max="99" inputmode="numeric" required></div>
-        <div><label for="male">Male</label><input id="male" type="number" min="0" max="99" inputmode="numeric" required></div>
-        <div><label for="female">Female</label><input id="female" type="number" min="0" max="99" inputmode="numeric" required></div>
-      </div>
-      <div class="err" id="countErr"></div>
+      <section class="card">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Household</h2>
+        <div><label for="house">House no.</label><input id="house" required autocomplete="off" maxlength="40"></div>
+        <div><label for="guardian">Guardian name</label><input id="guardian" required autocomplete="name" maxlength="80"></div>
+        <div>
+          <label for="phone">Phone no.</label>
+          <input id="phone" type="tel" inputmode="numeric" required autocomplete="tel" maxlength="14" placeholder="10-digit mobile number">
+          <div class="err" id="phoneErr"></div>
+        </div>
+      </section>
 
-      <div>
-        <label>House photo</label>
-        <div class="photo">
+      <section class="card">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4.5 2 4.5 5"/></svg>Persons living here</h2>
+        <div class="row">
+          <div class="cnt t"><label for="total">Total</label><input id="total" type="number" min="1" max="99" inputmode="numeric" required></div>
+          <div class="cnt m"><label for="male"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M12 10v6M9 20l3-4 3 4M8 12h8"/></svg>Male</label><input id="male" type="number" min="0" max="99" inputmode="numeric" required></div>
+          <div class="cnt f"><label for="female"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.5" r="3"/><path d="M12 9l-4 8h8zM10 21v-4M14 21v-4"/></svg>Female</label><input id="female" type="number" min="0" max="99" inputmode="numeric" required></div>
+        </div>
+        <div class="err" id="countErr"></div>
+      </section>
+
+      <section class="card">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13.5" r="3.6"/></svg>House photo</h2>
+        <div class="photo" id="photoBox">
+          <svg class="ph" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h10l5-7h18l5 7h10v30H8z"/><circle cx="32" cy="36" r="9"/><circle cx="32" cy="36" r="4" fill="currentColor" opacity=".25"/></svg>
           <img id="preview" alt="House photo preview">
-          <label class="btn" for="photo" id="photoBtn">Take or choose photo</label>
+          <label class="btn" for="photo" id="photoBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13.5" r="3.6"/></svg><span id="photoBtnT">Take or choose photo</span></label>
           <input id="photo" type="file" accept="image/*" capture="environment">
           <div class="hint" id="photoHint">One clear photo of the house front.</div>
         </div>
-      </div>
+      </section>
 
-      <div>
-        <label for="remarks">Remarks</label>
-        <textarea id="remarks" maxlength="1000"></textarea>
-      </div>
+      <section class="card">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Remarks</h2>
+        <textarea id="remarks" maxlength="1000" aria-label="Remarks" placeholder="Anything worth noting about this visit"></textarea>
+      </section>
 
-      <button class="primary" id="submit" type="submit" disabled>Save entry</button>
+      <button class="primary" id="submit" type="submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Save entry</button>
       <div id="status" aria-live="polite"></div>
     </fieldset>
   </form>
@@ -108,6 +160,7 @@ button.primary:disabled{opacity:.6;cursor:not-allowed}
 
 <div class="lock" id="lock" role="alertdialog" aria-labelledby="lockT">
   <div>
+    <svg class="big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/><path d="M3 3l18 18"/></svg>
     <h2 id="lockT">Turn on location to continue</h2>
     <p id="lockMsg">This form cannot be used without your location.</p>
     <ol>
@@ -216,8 +269,8 @@ $("photo").addEventListener("change", e=>{
     c.getContext("2d").drawImage(img,0,0,c.width,c.height);
     const d = c.toDataURL("image/jpeg",0.8);
     photoData = d.split(",")[1];
-    $("preview").src = d; $("preview").style.display="block";
-    $("photoBtn").textContent = "Change photo";
+    $("preview").src = d; $("preview").style.display="block"; $("photoBox").classList.add("has");
+    $("photoBtnT").textContent = "Change photo";
     $("photoHint").textContent = "Photo ready ("+Math.round(photoData.length*0.75/1024)+" KB).";
     URL.revokeObjectURL(url);
   };
@@ -245,6 +298,9 @@ $("f").addEventListener("submit", async e=>{
   if(!validate()) return;
   if(!photoData){ st.className="bad"; st.textContent="Add a house photo first."; return; }
   if(SCRIPT_URL.startsWith("PASTE")){ st.className="bad"; st.textContent="SCRIPT_URL is not set in index.html."; return; }
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(SCRIPT_URL.trim())){
+    st.className="bad"; st.textContent="SCRIPT_URL must be the Web App URL ending in /exec."; return;
+  }
 
   const btn = $("submit");
   if(!loc){ lockForm("Location is needed to save the entry."); return; }
@@ -263,15 +319,19 @@ $("f").addEventListener("submit", async e=>{
     photo: photoData
   };
   try{
-    const r = await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+    const r = await fetch(SCRIPT_URL.trim(),{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
     const j = await r.json();
     if(!j.ok) throw new Error(j.error||"Server error");
     st.className="ok"; st.textContent="Saved. Ready for the next house.";
     startLocation();   // next house needs its own fresh fix
-    $("f").reset(); photoData=null; $("preview").style.display="none";
-    $("photoBtn").textContent="Take or choose photo"; $("photoHint").textContent="One clear photo of the house front.";
+    $("f").reset(); photoData=null; $("preview").style.display="none"; $("photoBox").classList.remove("has");
+    $("photoBtnT").textContent="Take or choose photo"; $("photoHint").textContent="One clear photo of the house front.";
   }catch(err){
-    st.className="bad"; st.textContent="Not saved: "+err.message+". Check your internet and try again.";
+    st.className="bad";
+    st.textContent = (err instanceof TypeError)
+      ? (navigator.onLine ? "Not saved: could not reach the Google script. Check the script URL and that its access is set to Anyone."
+                          : "Not saved: you are offline. Connect to the internet and try again.")
+      : "Not saved: "+err.message;
   }finally{ busy=false; refreshGpsUI(); }
 });
 </script>
